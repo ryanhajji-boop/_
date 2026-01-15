@@ -27,7 +27,13 @@ class MainWindow(QMainWindow):
         form_layout = QFormLayout()
 
         name_edit = QLineEdit()
+        name_edit.textChanged.connect(self.on_text_change)
+
+        def on_text_change(self, new_text):
+            print(new_text)
+
         location_edit = QLineEdit()
+        location_edit.textChanged.connect(self.on_location_change)
 
         form_layout.addRow("Name:", name_edit)
         form_layout.addRow("Location:", location_edit)
@@ -41,10 +47,12 @@ class MainWindow(QMainWindow):
 
 
         ok_button = QPushButton("Ok")
-
-
-        
         cancel_button = QPushButton("Cancel")
+
+        ok_button.clicked.connect(self.button_click)
+
+   
+
 
     
         grid_layout.addWidget(combo, 0, 0)
@@ -52,9 +60,10 @@ class MainWindow(QMainWindow):
         grid_layout.addWidget(checkbox, 0, 1)
 
         
-        grid_layout.addWidget(ok_button, 1, 0)
-        grid_layout.addWidget(cancel_button, 1, 1)
+        grid_layout.addWidget(ok_button, 2, 1)
+        grid_layout.addWidget(cancel_button, 2, 2)
 
+       
 
 
 
@@ -64,6 +73,13 @@ class MainWindow(QMainWindow):
 
         central_widget.setLayout(main_layout)
 
+    def button_click(self):
+        print('button clicked')
+    
+    def on_text_change(self, new_text):
+            print(new_text)
+    def on_location_change(self,new_location):
+         print(new_location)
 
 app = QApplication(sys.argv)
 window = MainWindow()
