@@ -7,10 +7,8 @@ def menu():
             welcome = int(user_input)
             
             if welcome == 1:
-                # newScore()
                 print('new score')
             elif welcome == 2:
-                # displayAll()
                 print('display all')
             elif welcome == 3:
                 print("Exiting...")
@@ -21,10 +19,3 @@ def menu():
         except ValueError:
             print("Invalid input. Please enter a number.")
 menu()
-
-
-# def addNewScore()
-
-# def displayAll()
-
-# def exit()
