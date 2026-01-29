@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Birthday cool</title>
+  </head>
+  <body>
+    <h1>Birthday calc</h1>
+
+    <form action="{{ url_for('birthday_page') }}" method="post">
+      <label>
+        Name (optional):
+        <input type="text" name="name" value="{{ name }}">
+      </label>
+
+      <br><br>
+
+      <label>
+        DOB:
+        <input type="date" name="dob" required value="{{ dob }}">
+      </label>
+
+      <br><br>
+
+      <button type="submit">Calculate</button>
+    </form>
+
+    {% if info %}
+      <hr>
+      <h2>Hey, {{ info.name }}!</h2>
+      <pre>
+Date of birth:          {{ info.dob }}
+Next birthday:         {{ info.next_birthday }}
+Age at next birthday:  {{ info.age_at_next_birthday }}
+Today:                 {{ info.today }}
+
+      </pre>
+    {% endif %}
+  </body>
+</html>
