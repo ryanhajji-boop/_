@@ -3,9 +3,7 @@ from pathlib import Path
 from datetime import date, datetime
 
 app = Flask(__name__)
-
-DATA_PATH = Path(__file__).parent / "comments.txt"
-
+COMMENTS_FILE = Path("comments.txt")
 
 def normalize_birthday(y: int, m: int, d: int) -> date:
     """
@@ -18,7 +16,6 @@ def normalize_birthday(y: int, m: int, d: int) -> date:
         if m == 2 and d == 29:
             return date(y, 2, 28)
         raise
-
 
 def calculate_birthday_stats(person_name: str, birth_date: date) -> dict:
     today = date.today()
@@ -72,58 +69,39 @@ def birthday_page():
         dob=dob_input
     )
 
-
 @app.route("/ping-template")
 def template_test():
     return render_template(
         "birthday_form.html",
         info=None,
-        name="Henry",
+        name="Ryan",
         dob=""
     )
-
-
-def load_comments() -> list[str]:
-    if not DATA_PATH.exists():
-        return []
-    return DATA_PATH.read_text(encoding="utf-8").splitlines()
-
-
-def save_comment(author: str, message: str) -> None:
-    author = (author or "").strip()
-    message = (message or "").strip()
-
-    if not message:
-        return
-
-    timestamp = datetime.now().isoformat(timespec="seconds")
-    author_label = author if author else "Anonymous"
-
-    entry = f"[{timestamp}] {author_label}: {message}"
-
-    with DATA_PATH.open("a", encoding="utf-8") as file:
-        file.write(entry + "\n")
-
 
 @app.route("/comments", methods=["GET", "POST"])
 def comments_page():
     if request.method == "POST":
-        save_comment(
-            request.form.get("name", ""),
-            request.form.get("comment", "")
-        )
+        name = request.form.get("name", "Anonymous")
+        comment = request.form.get("comment", "No Comment")
+
+        with open(COMMENTS_FILE, "a") as f:
+            f.write(f"{name} said '{comment}' @ {datetime.now().isoformat()}\n")
+
         return redirect(url_for("comments_page"))
 
-    return render_template(
-        "comments.html",
-        entries=load_comments()
-    )
+    # GET request
+    if COMMENTS_FILE.exists():
+        text = COMMENTS_FILE.read_text()
+    else:
+        text = ""
 
+    return render_template("comments.html", text=text)
 
 @app.route("/")
 def home():
-    return "sup add /birthday to the url to see the final thing"
+    return render_template('LandingPage.html')
 
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8989)
+
