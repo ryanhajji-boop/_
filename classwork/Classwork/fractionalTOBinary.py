@@ -3,7 +3,14 @@ def decimal_to_binary(decimal_num, fractional_places=10):
     integer_part = int(decimal_num)
     fractional_part = decimal_num - integer_part
     
-    integer_binary = bin(integer_part)[2:]
+    integer_binary = ""
+    temp = integer_part
+    if temp == 0:
+        integer_binary = "0"
+    else:
+        while temp > 0:
+            integer_binary = str(temp % 2) + integer_binary
+            temp //= 2
     
     fractional_binary = ""
     for _ in range(fractional_places):
